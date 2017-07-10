@@ -36,6 +36,22 @@ source6 = {"name": "00006.MTS", "fps": 23.976, "frames": 7000}
 source7 = {"name": "00007.MTS", "fps": 23.976, "frames": 8000}
 
 
+class Source (object):
+    def __init__(self, s):
+        self.source = s
+
+    def __str__(self):
+        format_ = ("name: %s fps: %f frames: %d")
+        str_ = format_ % (self.source["name"], self.source["fps"],\
+                self.source["frames"])
+
+
+    def getDuration (self):
+        return (self.source["frames"] / self.source["fps"]) 
+
+
+
+
 class Take(object):
     def __init__(self, take):
         self.take = take
