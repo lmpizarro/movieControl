@@ -1,10 +1,27 @@
 
 # coding: utf-8
 
-# In[96]:
+take1 = {"dateTime":"Jun 1 2005 1:33PM", "scene": 1, "shot": 1, "take": 1}
+take2 = {"dateTime":"Jun 1 2005 2:33PM", "scene": 1, "shot": 1, "take": 2}
+take3 = {"dateTime":"Jun 1 2005 3:33PM", "scene": 1, "shot": 1, "take": 3}
+take4 = {"dateTime":"Jun 1 2005 4:33PM", "scene": 1, "shot": 2, "take": 1}
+take5 = {"dateTime":"Jun 1 2005 5:33PM", "scene": 1, "shot": 2, "take": 2}
+take6 = {"dateTime":"Jun 1 2005 6:33PM", "scene": 1, "shot": 2, "take": 3}
+take7 = {"dateTime":"Jun 1 2005 8:33PM", "scene": 1, "shot": 2, "take": 4}
+
+
+class dbTakes (object):
+    def __init__(self):
+        self.db = []
+        
+
+    def insert(self, take):
+        self.db.append(take)
+
 
 
 import math
+from  datetime import datetime
 
 class TimeCode (object):
     def __init__(self, timeCode):
@@ -147,9 +164,29 @@ class MyApplication(object):
         
         sourceIn.toTimeCode(frames, fps)
         
+'''
+https://stackoverflow.com/questions/466345/converting-string-into-datetime
+'''
+def dbTakeTest():
+    dbT = dbTakes()
+
+    dbT.insert(take1)
+    dbT.insert(take2)
+    dbT.insert(take3)
+    dbT.insert(take4)
+    dbT.insert(take5)
+    dbT.insert(take6)
+    dbT.insert(take7)
+
+    for e in dbT.db:
+        my_date = datetime.strptime(e["dateTime"], '%b %d %Y %I:%M%p')
+        print (my_date)
+
 
 if __name__ == "__main__":
     edLine = "001  Wildlife AA/V  C        01:02:08:24 01:02:11:24 00:00:01:12 00:00:04:12"
     app = MyApplication(edLine)
     app.run()
+    dbTakeTest()
+
 
