@@ -8,6 +8,9 @@
     3) shot
     4) take
     5) source
+
+    #my_date = datetime.strptime(e["dateTime"], '%b %d %Y %I:%M%p')
+    https://stackoverflow.com/questions/466345/converting-string-into-datetime
 '''
 take1 = {"dateTime":"Jun 1 2005 1:33PM", "scene": 1, "shot": 1, "take": 1,
 "source": "00001.MTS"}
@@ -23,6 +26,14 @@ take6 = {"dateTime":"Jun 1 2005 6:33PM", "scene": 1, "shot": 2, "take": 3,
 "source": "00006.MTS"}
 take7 = {"dateTime":"Jun 1 2005 8:33PM", "scene": 1, "shot": 2, "take": 4,
 "source": "00007.MTS"}
+
+source1 = {"name": "00001.MTS", "fps": 23.976, "frames": 1000}
+source2 = {"name": "00002.MTS", "fps": 23.976, "frames": 1500}
+source3 = {"name": "00003.MTS", "fps": 23.976, "frames": 2000}
+source4 = {"name": "00004.MTS", "fps": 23.976, "frames": 5000}
+source5 = {"name": "00005.MTS", "fps": 23.976, "frames": 4300}
+source6 = {"name": "00006.MTS", "fps": 23.976, "frames": 7000}
+source7 = {"name": "00007.MTS", "fps": 23.976, "frames": 8000}
 
 
 class Take(object):
@@ -43,8 +54,8 @@ class dbTakes (object):
         self.db = []
         
 
-    def insert(self, take):
-        self.db.append(take.take)
+    def insert(self, tk):
+        self.db.append(tk)
 
 
 
@@ -193,9 +204,6 @@ class MyApplication(object):
         sourceIn.toTimeCode(frames, fps)
         
 '''
-https://stackoverflow.com/questions/466345/converting-string-into-datetime
-'''
-'''
     1) dateTime
     2) scene
     3) shot
@@ -207,24 +215,23 @@ def dbTakeTest():
 
     take = Take(take1)
 
-    dbT.insert(take.take)
+    dbT.insert(take)
 
     take = Take(take2)
-    dbT.insert(take.take)
+    dbT.insert(take)
     take = Take(take3)
-    dbT.insert(take.take)
+    dbT.insert(take)
     take = Take(take4)
-    dbT.insert(take.take)
+    dbT.insert(take)
     take = Take(take5)
-    dbT.insert(take.take)
+    dbT.insert(take)
     take = Take(take6)
-    dbT.insert(take.take)
+    dbT.insert(take)
     take = Take(take7)
-    dbT.insert(take.take)
+    dbT.insert(take)
 
     for e in dbT.db:
-        my_date = datetime.strptime(e["dateTime"], '%b %d %Y %I:%M%p')
-        print (e["scene"])
+        print (e)
 
 
 def takeTest():
@@ -238,6 +245,6 @@ if __name__ == "__main__":
     edLine = "001  Wildlife AA/V  C        01:02:08:24 01:02:11:24 00:00:01:12 00:00:04:12"
     app = MyApplication(edLine)
     app.run()
-    takeTest()
+    dbTakeTest()
 
 
