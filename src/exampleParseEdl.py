@@ -24,7 +24,13 @@ with open('test_2398.edl') as f:
         str_ = format1%(str(event.source_file), str(event.clip_name))
         print (str_)
 
+
         print ("------------------------------------------")
+
+        print (event.comments)
+
+        print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+
 
 
 

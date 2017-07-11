@@ -1,12 +1,69 @@
 import math
 # coding: utf-8
 
-class TimeCode (object):
+class _Fps (object):
+    def __init__(self, num = 24000, den = 1000):
+        self.num = num
+        self.den = den
+        self.fps = num/den
 
-    def __init__(self, fps, timeCode="00:00:00:00"):
+    def __str__(self):
+        format_ = ("num: %s den: %s fps: %s")
+        str_ = format_ % (str(self.num), str(self.den),str(self.fps))
 
+class _Frames (object):
+
+    def __init__(self, Fps, frames = 0):
+        self.Fps = Fps
+        self.fps = self.Fps.fps
+        self.frames = frames
+
+    def __str__(self):
+        format_ = ("%s %s")
+        str_ = format_ % (self.fps, self.frames)
+        return (str_)
+
+
+    def toTimeCode (self):
+        hours = 0
+        mins = 0
+        scnds = 0
+        
+        seconds = self.frames / self.fps
+        
+        frs = seconds - int(seconds)
+        
+        seconds = int(seconds)
+        frames = math.floor(frs * self.fps)
+        
+        if seconds > 59:
+            mins = seconds / 60
+            scnds = int((mins - int(mins))*60)
+        else:
+            scnds = int(seconds)
+
+        if mins > 59:
+            hours = mins / 60
+            mins = int((hours - int(hours))*60)
+            hours = int(hours)
+        else:
+            mins = int(mins)
+
+
+        format1 = ("%s:%s:%s:%s")
+
+        str_ = format1 % (str(hours).zfill(2), str(mins).zfill(2),\
+                str(scnds).zfill(2), str(frames).zfill(2))
+
+        return (_TimeCode(self.Fps, str_))
+ 
+class _TimeCode (object):
+
+    def __init__(self, Fps, timeCode="00:00:00:00"):
+
+        self.Fps = Fps
         self.timeCode = timeCode
-        self.fps = fps
+        self.fps = self.Fps.fps
 
         fields = self.timeCode.split(":")
 
@@ -27,47 +84,18 @@ class TimeCode (object):
             if self.frame > self.fps:
                 print ("Error")
 
-
-        self.fps = fps
-
     def toList (self):
         list_ = {"HH": self.hour, "MM": self.min, "SS": self.second, "FF":\
-                self.frame, "fps": self.fps}
+                self.frame, "fps": self.fps.fps}
         return list_
     
     def toFrames (self):
         frames = 0
         seconds = self.hour * 3600 + self.min * 60 + self.second
         frames = math.ceil(seconds * self.fps + self.frame)
-        return (frames)
-    
-    def toTimeCode (self, frames):
-        self.hour = 0
-        self.min = 0
-        self.second = 0
-        self.frame = 0
 
-        hours = 0
-        mins = 0
-        scnds = 0
-        
-        seconds = frames / self.fps
-        
-        frs = seconds - int(seconds)
-        
-        seconds = int(seconds)
-        frames = math.floor(frs * self.fps)
-        
-        if seconds > 3600:
-            hours = math.floor(seconds/3600)
-            mins = (seconds/3600 - hours) * 60
-            
-            scnds = (mins - math.floor(mins)) * 60
-        
-        self.hour = hours
-        self.min = math.floor(mins)
-        self.second = math.floor(scnds)
-        self.frame = frames
+        return (_Frames(self.Fps, frames))
+    
 
     def toCode (self):
         format_ = ("%s:%s:%s:%s")
@@ -78,23 +106,31 @@ class TimeCode (object):
 
     def __str__(self):
         format_ = ("HH: %s MM: %s SS: %s FF : %s fps: %s")
-        str_ = format_ % (self.hour, self.min, self.second, self.frame, self.fps)
+        str_ = format_ % (self.hour, self.min, self.second, self.frame,\
+                self.fps)
         return (str_)
 
 
 def testTimeCode ():
-    fps = 24000/1001
-    tc1 = TimeCode(fps, "01:01:32:23")
+    fps = _Fps(24000, 1001)
+    tc1 = _TimeCode(fps, "01:32:00:23")
     frames = tc1.toFrames()
-    print (tc1)
-    print (frames)
-    
-    tc1.toTimeCode(frames)
+    print ("test ", frames)
+    print ("test ", tc1)
 
-    print (tc1)
+    fr = _Frames(fps, frames.frames)
 
-    print(tc1.timeCode)
+    print("test",fr)
+
+    print("test", fr.toTimeCode())
+
+   
+def testFrames ():
+    fps = _Fps (24000,  1001)
+    fr = _Frames(fps, 132371)
+    print (fr.toTimeCode())
+
 
 
 if __name__ == "__main__":
-    testTimeCode()
+    testFrames()
