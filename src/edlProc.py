@@ -1,61 +1,8 @@
 
 # coding: utf-8
 
-import math
-from  datetime import datetime
-import take as Take
+import timeCode as tc
 
-
-class TimeCode (object):
-    def __init__(self, timeCode):
-        self.timeCode = timeCode
-        self.fields = self.timeCode.split(":")
-        if len(self.fields) == 4:
-            self.hour = int(self.fields[0])
-            self.min = int(self.fields[1])
-            self.second = int(self.fields[2])
-            self.frame = int(self.fields[3])
-    
-    def __str__(self):
-        format_ = ("HH: %s MM: %s SS: %s FF : %s")
-        str_ = format_ % (self.hour, self.min, self.second, self.frame)
-        return str_
-
-    def toList (self):
-        list_ = {"HH": self.hour, "MM": self.min, "SS": self.second, "FF": self.frame}
-        return list_
-    
-    def toFrames (self, fps):
-        frames = 0
-        seconds = self.hour * 3600 + self.min * 60 + self.second
-        frames = math.ceil(seconds * fps + self.frame)
-        return (frames)
-    
-    def toTimeCode (self, frames, fps):
-        self.hour = 0
-        self.min = 0
-        self.second = 0
-        self.frame = 0
-        
-        seconds = frames / fps
-        
-        frs = seconds - int(seconds)
-        
-        seconds = int(seconds)
-        frames = math.floor(frs * fps)
-        
-        if seconds > 3600:
-            hours = math.floor(seconds/3600)
-            mins = (seconds/3600 - hours) * 60
-            
-            scnds = (mins - math.floor(mins)) * 60
-        
-        self.hour = hours
-        self.min = math.floor(mins)
-        self.second = math.floor(scnds)
-        self.frame = frames
-        
-        print (self)
 
 class EditDecisionLine (object):
     '''
@@ -131,10 +78,10 @@ class MyApplication(object):
         
     def run (self):
         print (self.prj)
-        sourceIn = TimeCode(self.prj.toList()["SourceIn"])
-        sourceOut = TimeCode(self.prj.toList()["SourceOut"])
-        recordIn = TimeCode(self.prj.toList()["RecordIn"])
-        recordOut = TimeCode(self.prj.toList()["RecordOut"])
+        sourceIn = tc.TimeCode(self.prj.toList()["SourceIn"])
+        sourceOut = tc.TimeCode(self.prj.toList()["SourceOut"])
+        recordIn = tc.TimeCode(self.prj.toList()["RecordIn"])
+        recordOut = tc.TimeCode(self.prj.toList()["RecordOut"])
         print ("Source In: ", sourceIn)
         print (sourceOut)
         print (recordIn)
