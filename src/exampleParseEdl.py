@@ -31,6 +31,5 @@ with open('test_2398.edl') as f:
 
         print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
-
-
+        print (event.to_string())
 

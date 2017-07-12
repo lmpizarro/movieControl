@@ -11,6 +11,8 @@ class _Fps (object):
         format_ = ("num: %s den: %s fps: %s")
         str_ = format_ % (str(self.num), str(self.den),str(self.fps))
 
+        return (str_)
+
 class _Frames (object):
 
     def __init__(self, Fps, frames = 0):
@@ -62,8 +64,8 @@ class _TimeCode (object):
     def __init__(self, Fps, timeCode="00:00:00:00"):
 
         self.Fps = Fps
-        self.timeCode = timeCode
         self.fps = self.Fps.fps
+        self.timeCode = timeCode
 
         fields = self.timeCode.split(":")
 
