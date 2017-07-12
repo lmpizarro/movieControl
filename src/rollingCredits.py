@@ -1,7 +1,15 @@
-import PIL
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
+
+
+with open('rollCreds.txt') as f:
+    content = f.readlines()
+
+[x.strip() for x in content]
+
+print content
+
 '''
 http://python-catalin.blogspot.com.ar/2010/06/add-text-on-image-with-pil-module.html
 '''
@@ -13,13 +21,11 @@ img=Image.new("RGBA", (cols, lines * 2),(120,20,20))
 draw = ImageDraw.Draw(img)
 disy = lines
 dis_anim = 4
+dis_pixel = 25
 
-draw.text((0, 0 + disy),"This is a test",(255,255,0),font=font)
-draw.text((0, 25 + disy),"This is a test",(255,255,0),font=font)
-draw.text((0, 50 + disy),"This is a test",(255,255,0),font=font)
-draw.text((0, 75 + disy),"This is a test",(255,255,0),font=font)
-draw.text((0, 100 + disy),"This is a test",(255,255,0),font=font)
-draw.text((0, 125 + disy),"This is a test",(255,255,0),font=font)
+for i, t in enumerate(content):
+    print i, t
+    draw.text((0, i*dis_pixel + disy),t[:-1],(255,255,0),font=font)
 
 img.save("imageBase.png")
 
