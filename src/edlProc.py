@@ -10,15 +10,17 @@ class EditDecisionLine (object):
     the channel(s) to record, the transition (Cut, dissolve, etc), transition 
     duration (if applicable), Source IN time code, Source OUT, Record IN, Record OUT.
     
-    1) Edit_ 
-    2) ReelName  
-    3) Channel
-    4) Trans
+    1) Edit_     3 chars
+    2) ReelName  4 chars
+    3) Channel   4 chars
+    4) Trans     4 chars
     5) Dur
     6) SourceIN   
     7) SourceOUT  
     8) RecordIN   
     9) RecordOUT
+                            11:11:11:11
+    111-222--3333--4444-555-666666666666-777777777777-888888888888-999999999999
     
     '''
     def __init__(self, line):
@@ -63,41 +65,52 @@ class EditDecisionLine (object):
         
         return list_
             
-    
-class Project(object):
-    def __init__(self):
-        pass
-    
-    def addTake (self):
-        pass
-
+   
 class MyApplication(object):
     def __init__(self, edLine):
-        self.prj = EditDecisionLine(edLine)
+        self.line = EditDecisionLine(edLine)
         
         
     def run (self):
-        print (self.prj)
-        sourceIn = tc.TimeCode(self.prj.toList()["SourceIn"])
-        sourceOut = tc.TimeCode(self.prj.toList()["SourceOut"])
-        recordIn = tc.TimeCode(self.prj.toList()["RecordIn"])
-        recordOut = tc.TimeCode(self.prj.toList()["RecordOut"])
+        fps = tc._Fps()
+
+        sourceIn = tc._TimeCode(fps, self.line.toList()["SourceIn"])
+        sourceOut = tc._TimeCode(fps, self.line.toList()["SourceOut"])
+        recordIn = tc._TimeCode(fps, self.line.toList()["RecordIn"])
+        recordOut = tc._TimeCode(fps, self.line.toList()["RecordOut"])
         print ("Source In: ", sourceIn)
         print (sourceOut)
         print (recordIn)
         print (recordOut)
         
-        fps = 25
-        frames = sourceIn.toFrames(fps)
+        frames = sourceIn.toFrames()
         
         print ("Source In Frames: ", frames)
         
-        sourceIn.toTimeCode(frames, fps)
-        
-
-if __name__ == "__main__":
+    
+def myApplication ():
     edLine = "001  Wildlife AA/V  C        01:02:08:24 01:02:11:24 00:00:01:12 00:00:04:12"
     app = MyApplication(edLine)
     app.run()
 
+from edl import Event
+    
+class testEdl (object):
 
+    def __init__(self):
+        e = Event([])
+        e.comments.append("* FROM CLIP NAME: Jellyfish.jpg")
+        e.comments.append("* TO CLIP NAME: BL")
+        e.num = "001"
+        e.reel = "wildlife"
+        e.src_start_tc = "01:02:08:23"
+        e.src_end_tc = "01:02:11:23"
+        e.rec_start_tc = "00:00:01:23"
+        e.rec_end_tc = "00:00:04:23"
+        e.tr_code = "C"
+        e.track = "V"
+
+        print (e.to_string())
+ 
+if __name__ == "__main__":
+    ma = testEdl()
