@@ -285,6 +285,9 @@ class Effect(object):
     def __init__(self):
         pass
 
+    def __str__(self):
+        return ("Effect")
+
 
 class Cut(Effect):
     """No documentation for this class yet.
@@ -292,6 +295,10 @@ class Cut(Effect):
 
     def __init__(self):
         Effect.__init__(self)
+
+    def __str__(self):
+        str_ = str(Effect())
+        return (str_ + ": "+ "Cut")
 
 
 class Wipe(Effect):
@@ -301,6 +308,9 @@ class Wipe(Effect):
     def __init__(self):
         Effect.__init__(self)
 
+    def __str__(self):
+        return ("Wipe")
+
 
 class Dissolve(Effect):
     """No documentation for this class yet.
@@ -309,6 +319,9 @@ class Dissolve(Effect):
     def __init__(self):
         Effect.__init__(self)
 
+    def __str__(self):
+        return ("Dissolve")
+
 
 class Key(Effect):
     """No documentation for this class yet.
@@ -316,6 +329,10 @@ class Key(Effect):
 
     def __init__(self):
         Effect.__init__(self)
+
+    def __str__(self):
+        return ("Key")
+
 
 
 class Timewarp(object):
@@ -376,6 +393,31 @@ class Event(object):
     #     v.append(")")
     #     return ''.join(v)
 
+    def to_dict (self):
+        dict_ = {}
+
+        dict_["timewarp"]= self.timewarp 
+        dict_["next_event"]= self.next_event
+        dict_["clip_name"]= self.clip_name
+        dict_["source_file"]= self.source_file
+        dict_["transition"]= self.transition
+
+
+        dict_["num"]= self.num
+        dict_["reel"]= self.reel
+        dict_["track"]= self.track
+        dict_["code"]= self.tr_code
+        dict_["aux"]= self.aux
+        dict_["src_start_tc"]= self.src_start_tc
+        dict_["src_end_tc"]= self.src_end_tc
+        dict_["rec_start_tc"]= self.rec_start_tc
+        dict_["rec_end_tc"]= self.rec_end_tc
+        dict_["comments"]= self.comments
+
+        return dict_
+
+
+
     def to_string(self):
         """Human Readable string representation of edl event.
 
@@ -411,6 +453,10 @@ class Event(object):
                 if self.has_timewarp() else ''}
 
         return s
+
+    def __str__(self):
+        return (self.to_string())
+
 
     def to_inspect(self):
         """Human Readable string representation of edl event.
@@ -555,4 +601,5 @@ class Parser(object):
                 for m in self.get_matchers():
                     m.apply(stack, l)
         pprint.PrettyPrinter(indent=4)
+        # List of events
         return stack

@@ -21,6 +21,13 @@ class EditDecisionLine (object):
     9) RecordOUT
                              11:11:11:11
     111-222--3333--4444-555-666666666666-777777777777-888888888888-999999999999
+
+    transitions:
+
+    1) Cut
+    2) Disolve
+    3) Wipes
+
     
     '''
     def __init__(self, line):
