@@ -7,9 +7,19 @@ class _Fps (object):
         self.den = den
         self.fps = num/den
 
+        frac = self.fps - int(self.fps)
+
+        if frac == 0:
+            self.NDF = True
+        else:
+            self.NDF = False
+
+
+
     def __str__(self):
-        format_ = ("num: %s den: %s fps: %s")
-        str_ = format_ % (str(self.num), str(self.den),str(self.fps))
+        format_ = ("num: %s den: %s fps: %s NDF: %s")
+        str_ = format_ % (str(self.num), str(self.den),str(self.fps),\
+                str(self.NDF))
 
         return (str_)
 
@@ -34,7 +44,9 @@ class _Frames (object):
         seconds = self.frames / self.fps
         
         frs = seconds - int(seconds)
-        
+
+        print(self.fps)
+
         seconds = int(seconds)
         frames = math.floor(frs * self.fps)
         
@@ -129,9 +141,10 @@ def testTimeCode ():
    
 def testFrames ():
     fps = _Fps (24000,  1001)
-    fr = _Frames(fps, 132371)
+    fr = _Frames(fps, 240*6)
     print (fr.toTimeCode())
 
+    print (fps)
 
 
 if __name__ == "__main__":

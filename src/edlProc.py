@@ -14,7 +14,7 @@ class EditDecisionLine (object):
     2) ReelName  4 chars
     3) Channel   4 chars
     4) Trans     4 chars
-    5) Dur
+    5) Dur   if Trans is a Dissolve or Wipe
     6) SourceIN   
     7) SourceOUT  
     8) RecordIN   
@@ -118,6 +118,11 @@ class testEdl (object):
         e.track = "V"
 
         print (e.to_string())
- 
+
+
+class Project(object):
+    def __init__(self):
+        pass
+
 if __name__ == "__main__":
     ma = testEdl()

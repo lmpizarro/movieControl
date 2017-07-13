@@ -393,14 +393,15 @@ class Event(object):
     #     v.append(")")
     #     return ''.join(v)
 
-    def to_dict (self):
+    def to_dict (self, all_=True):
         dict_ = {}
 
-        dict_["timewarp"]= self.timewarp 
-        dict_["next_event"]= self.next_event
-        dict_["clip_name"]= self.clip_name
-        dict_["source_file"]= self.source_file
-        dict_["transition"]= self.transition
+        if all_:
+            dict_["timewarp"]= self.timewarp 
+            dict_["next_event"]= self.next_event
+            dict_["clip_name"]= self.clip_name
+            dict_["source_file"]= self.source_file
+            dict_["transition"]= self.transition
 
 
         dict_["num"]= self.num

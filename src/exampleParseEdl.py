@@ -41,7 +41,7 @@ def test02():
       edl = parser.parse(f)
 
       for e in edl:
-        dict_event = e.to_dict()
+        dict_event = e.to_dict(False)
         for k in dict_event.keys():
             print (k, str(dict_event[k]))
         print()    
