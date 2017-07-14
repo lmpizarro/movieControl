@@ -55,3 +55,46 @@ def testSource():
 
 if __name__ == "__main__":
     testSource()
+
+    from os import listdir
+    from os.path import isfile, join
+
+    mypath = "./"
+    onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+
+    import glob
+    result = glob.glob("./*.py")
+
+
+    import os
+    result = [os.path.join(dp, f) for dp, dn, filenames in os.walk("./") for f \
+            in filenames if os.path.splitext(f)[1] == '.py']
+
+
+    '''
+    https://stackoverflow.com/questions/18394147/recursive-sub-folder-search-and-return-files-in-a-list-python
+    '''
+    import os
+    from glob import glob
+    import subprocess
+
+    result = [y for x in os.walk("../../") for y in glob(os.path.join(x[0],\
+        '*.mpg'))]
+
+
+    for e in result:
+        p = subprocess.Popen (['exiftool', e], stdout=subprocess.PIPE)
+        d, err = p.communicate()
+        my_decoded_str = d.decode()
+        sp = my_decoded_str.split("\n")
+        metadata = {}
+        for s in sp:
+            se = [e.strip() for e in s.split(" :")]
+            if len(se) == 2:
+                metadata[se[0]] = se[1]
+        print (metadata)
+
+    result = []
+    for x in os.walk("./"):
+        for y in glob(os.path.join(x[0], '*.py')):
+                result.append(y)
