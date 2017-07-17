@@ -30,8 +30,13 @@
       </Core>
    </File>
 </conformance_point_document>
-
 '''
+
+import os
+from glob import glob
+import subprocess
+from xml.dom import minidom
+
 '''
 https://docs.python.org/2/library/xml.dom.minidom.html
 '''
@@ -41,11 +46,6 @@ def getText(nodelist):
        if node.nodeType == node.TEXT_NODE:
           rc.append(node.data)
     return ''.join(rc)
-
-import os
-from glob import glob
-import subprocess
-from xml.dom import minidom
 
 def gen_out_core_xml(dir_):
 
@@ -72,7 +72,12 @@ def prettify(elem):
     """
     rough_string = ET.tostring(elem, 'utf-8')
     reparsed = minidom.parseString(rough_string)
-    return reparsed.toprettyxml(indent="  ")
+    reparsed = reparsed.toprettyxml(indent="  ")
+    '''
+       https://stackoverflow.com/questions/1662351/problem-with-the-new-lines-when-i-use-toprettyxml
+    '''
+    reparsed = os.linesep.join([s for s in reparsed.splitlines() if s.strip()])
+    return reparsed
 
 
 
@@ -138,13 +143,12 @@ def parse_with_ltree(result):
         p = etree.tostring(root, pretty_print=True )
         print (root.get("Core"))
         print(p)
-        print("\n\n\n")    
 
 def test_with_dom():
     dir_ = '../media'
     result = gen_out_core_xml(dir_)
     change_node_names(result)
-    print_bexts()
+    #print_bexts()
     geniXML()
 
 def test_with_ltree():
