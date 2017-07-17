@@ -44,7 +44,6 @@ from glob import glob
 import subprocess
 from xml.dom import minidom
 
-from lxml import etree
 
 
 def gen_out_core_xml(dir_):
@@ -58,27 +57,41 @@ def gen_out_core_xml(dir_):
         p = subprocess.Popen (['bwfmetaedit', "--out-core-xml", e], stdout=subprocess.PIPE)
         d, err = p.communicate()
 
-
-def parse_with_xml_dom(dir_):
-
-
     result = [y for x in os.walk(dir_) for y in glob(os.path.join(x[0],\
         '*.xml'))]
 
+    return result
 
-    nodes = ["Originator","OriginationDate", "OriginationTime", \
-             "TimeReference_translated", "TimeReference", "BextVersion",\
-             "CodingHistory" ]
 
+from xml.etree import ElementTree as ET
+'''
+       https://stackoverflow.com/questions/27294416/is-there-any-way-to-change-the-element-node-name-in-minidom-python
+'''
+
+def parse_with_xml_dom(result):
+
+    nodes = \
+    {"Originator" : "BWF_ORIGINATOR", "OriginationDate" : "BWF_ORIGINATION_DATE",\
+     "OriginationTime" : "BWF_ORIGINATION_TIME", \
+     "TimeReference_translated": "BWF_TIME_REFERENCE_TRANSLATED",\
+     "TimeReference" : "BWF_TIME_REFERENCE", "BextVersion":"BWF_VERSION",\
+     "CodingHistory":"BWF_CODING_HISTORY", "Core" : "BEXT" }
 
     for r in result:
         xmldoc = minidom.parse(r)
+        root = ET.fromstring(xmldoc.toxml())
+        for k in nodes.keys():
+            core = root.find('.//' + k)
+            core.tag = nodes[k] 
 
-        for n in nodes:
+
+        for n in nodes.keys():
             itemlist = xmldoc.getElementsByTagName(n)
             if len(itemlist) > 0:
                 print(n, " : ", getText(itemlist[0].childNodes))
 
+        xml_string = ET.tostring(root)
+        print (xml_string)
         print()    
 
     xmldoc = minidom.parse(result[0])
@@ -86,13 +99,31 @@ def parse_with_xml_dom(dir_):
     if itemlist[0].hasChildNodes():
         ch = itemlist[0]._get_childNodes()
 
-    print (ch)
+    #print(xml_string)
 
+from io import StringIO, BytesIO
+from lxml import etree
+
+'''
+http://lxml.de/
+'''
+def parse_with_ltree(result):
+    for r in result:
+        root = etree.parse(r)
+        p = etree.tostring(root, pretty_print=True )
+        print (root.get("Core"))
+        print(p)
+        print("\n\n\n")    
 
 def test_with_dom():
     dir_ = '../media'
-    gen_out_core_xml(dir_)
-    parse_with_xml_dom(dir_)
+    result = gen_out_core_xml(dir_)
+    parse_with_xml_dom(result)
+
+def test_with_ltree():
+    dir_ = '../media'
+    result = gen_out_core_xml(dir_)
+    parse_with_ltree(result)
 
 
 if __name__ == "__main__":
