@@ -74,17 +74,11 @@ if __name__ == "__main__":
     fileName = 'testixml.xml'
     ixml = Ixml (fileName)
 
-    #print ( ixml.to_dict())
-
-    print (ixml.getDict())
+    #print (ixml.getDict())
 
 
     tree = etree.parse(fileName )
     root = tree.getroot()
-
-    print (len(root))
-
-    print ("..", root.tag)
 
     dict_ = {}
     dict_[root.tag] = {}
@@ -92,20 +86,54 @@ if __name__ == "__main__":
 
     for child in root:
         if len(child) > 0:
-            for c in child:
-                print(child.tag, c.tag, len(c))
+            dict_[root.tag][child.tag] = {} 
+
+
+            if child.tag == "SPEED":
+                for c in child:
+                    dict_[root.tag][child.tag][c.tag] = c.text 
+
+            if child.tag == "BEXT":
+                for c in child:
+                    dict_[root.tag][child.tag][c.tag] = c.text 
+
+
+            if child.tag == "HISTORY":
+                for c in child:
+                    dict_[root.tag][child.tag][c.tag] = c.text 
+
+
+            if child.tag == "FILE_SET":
+                for c in child:
+                    dict_[root.tag][child.tag][c.tag] = c.text 
+
+
+            if child.tag == "TRACK_LIST":
+                dict_[root.tag][child.tag] = []
+                for c in child:
+                    if len(c) > 0:
+                        a = {}
+                        for s in c:
+                            a[s.tag] = s.text
+                        dict_[root.tag][child.tag].append(a)
+
+
+
+            if child.tag == "SYNC_POINT_LIST":
+                dict_[root.tag][child.tag] = []
+                for c in child:
+                    if len(c) > 0:
+                        a = {}
+                        for s in c:
+                            a[s.tag] = s.text
+                        dict_[root.tag][child.tag].append(a)
+
+
+ 
+
+
         else:
            dict_[root.tag][child.tag] = child.text
-           print(root.tag, child.tag, child.text)
-
-
-    IXML_VERSION = root.findall("IXML_VERSION")[0].text
-    PROJECT = root.findall("PROJECT")[0].text
-    SCENE = root.findall("SCENE")[0].text
-
-    print("PROJECT", PROJECT)
-    print("IXML_VERSION", IXML_VERSION)
-    print("SCENE", SCENE)
 
 
     print (dict_)
