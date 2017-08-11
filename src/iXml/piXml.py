@@ -9,36 +9,69 @@ class Ixml(object):
 
         self.toDict()
 
+        self.keys = []
+        if "BWFXML" in self.dict_.keys(): 
+            self.keys = self.dict_["BWFXML"].keys()
+            
 
     def getProject(self):
-        return self.dict_["BWFXML"]["PROJECT"]
+        if "PROJECT" in self.keys:
+            return self.dict_["BWFXML"]["PROJECT"]
 
     def getIxml_Version(self):
-        return self.dict_["BWFXML"]["IXML_VERSION"]
+        if "IXML_VERSION" in self.keys:
+            return self.dict_["BWFXML"]["IXML_VERSION"]
 
     def getScene(self):
-        return self.dict_["BWFXML"]["SCENE"]
+        if "SCENE" in self.keys:
+            return self.dict_["BWFXML"]["SCENE"]
 
     def getTake(self):
-        return self.dict_["BWFXML"]["TAKE"]
+        if "TAKE" in self.keys:
+            return self.dict_["BWFXML"]["TAKE"]
 
     def getTape(self):
-        return self.dict_["BWFXML"]["TAPE"]
+        if "TAPE" in self.keys:
+            return self.dict_["BWFXML"]["TAPE"]
 
     def getCircled(self):
-        return self.dict_["BWFXML"]["CIRCLED"]
+        if "CIRCLED" in self.keys:
+            return self.dict_["BWFXML"]["CIRCLED"]
 
     def getNo_Good(self):
-        return self.dict_["BWFXML"]["NO_GOOD"]
+        if "NO_GOOD" in self.keys:
+            return self.dict_["BWFXML"]["NO_GOOD"]
 
     def getFalse_Start(self):
-        return self.dict_["BWFXML"]["FALSE_START"]
+        if "FALSE_START" in self.keys:
+            return self.dict_["BWFXML"]["FALSE_START"]
 
     def getWild_Track(self):
-        return self.dict_["BWFXML"]["WILD_TRACK"]
+        if "FALSE_START" in self.keys:
+            return self.dict_["BWFXML"]["FALSE_START"]
 
     def getFile_Uid(self):
-        return self.dict_["BWFXML"]["FILE_UID"]
+        if "FALSE_START" in self.keys:
+            return self.dict_["BWFXML"]["FILE_UID"]
+
+    def getNote(self):
+        if "NOTE" in self.keys:
+            return self.dict_["BWFXML"]["NOTE"]
+
+    def getTrack_List(self):
+        sng = "\n   "
+        if "TRACK_LIST" in self.keys:
+            list_ = self.dict_["BWFXML"]["TRACK_LIST"]
+
+            str_ = sng 
+            for l in list_:
+                sr = ""
+                ks = l.keys()
+                for k in  ks:
+                    sr = sr + ("%s: %s ")%(k, l[k])
+                str_ = str_ +  sr + sng 
+            return str_ 
+
 
 
     def to_dict(self):
@@ -103,7 +136,7 @@ class Ixml(object):
 
 if __name__ == "__main__":
 
-    fileName = 'testixml.xml'
+    fileName = 'testixmlC.xml'
     ixml = Ixml (fileName)
 
     dict_ = ixml.getDict()
@@ -119,7 +152,10 @@ if __name__ == "__main__":
     print ("FALSE_START: ", ixml.getFalse_Start())
     print ("WILD_TRACK: ", ixml.getWild_Track())
     print ("FILE_UID: ", ixml.getFile_Uid())
+    print ("NOTE: ", ixml.getNote())
+    print ("TRACK_LIST: ", ixml.getTrack_List())
 
-    for k in dict_["BWFXML"]["SPEED"]:
-        print ("SPEED ", k, " " , dict_["BWFXML"]["SPEED"][k])
+    if "SPEED" in ixml.keys:
+        for k in dict_["BWFXML"]["SPEED"]:
+            print ("SPEED ", k, " " , dict_["BWFXML"]["SPEED"][k])
 
