@@ -15,50 +15,51 @@ class Ixml(object):
         if "BWFXML" in self.dict_.keys(): 
             self.keys = self.dict_["BWFXML"].keys()
 
+    def getLevel0(self, key):
+        if key in self.keys:
+            str_ = self.sng 
+            str_ += self.dict_["BWFXML"][key] + self.sng
+        return str_
+
     def getProject(self):
-        if "PROJECT" in self.keys:
-            return self.dict_["BWFXML"]["PROJECT"]
+        return self.getLevel0("PROJECT")
+
+    def getUbits(self):
+        return self.getLevel0("UBITS")
+
+    def getUser(self):
+        return self.getLevel0("USER")
+
 
     def getIxml_Version(self):
-        if "IXML_VERSION" in self.keys:
-            return self.dict_["BWFXML"]["IXML_VERSION"]
+        return self.getLevel0("IXML_VERSION")
 
     def getScene(self):
-        if "SCENE" in self.keys:
-            return self.dict_["BWFXML"]["SCENE"]
+        return self.getLevel0("SCENE")
 
     def getTake(self):
-        if "TAKE" in self.keys:
-            return self.dict_["BWFXML"]["TAKE"]
+        return self.getLevel0("TAKE")
 
     def getTape(self):
-        if "TAPE" in self.keys:
-            return self.dict_["BWFXML"]["TAPE"]
+        return self.getLevel0("TAPE")
 
     def getCircled(self):
-        if "CIRCLED" in self.keys:
-            return self.dict_["BWFXML"]["CIRCLED"]
+        return self.getLevel0("CIRCLED")
 
     def getNo_Good(self):
-        if "NO_GOOD" in self.keys:
-            return self.dict_["BWFXML"]["NO_GOOD"]
+        return self.getLevel0("NO_GOOD")
 
     def getFalse_Start(self):
-        if "FALSE_START" in self.keys:
-            return self.dict_["BWFXML"]["FALSE_START"]
+        return self.getLevel0("FALSE_START")
 
     def getWild_Track(self):
-        if "FALSE_START" in self.keys:
-            return self.dict_["BWFXML"]["FALSE_START"]
+        return self.getLevel0("WILD_TRACK")
 
     def getFile_Uid(self):
-        if "FALSE_START" in self.keys:
-            return self.dict_["BWFXML"]["FILE_UID"]
+        return self.getLevel0("FILE_UID")
 
     def getNote(self):
-        if "NOTE" in self.keys:
-            return self.dict_["BWFXML"]["NOTE"]
-
+        return self.getLevel0("NOTE")
 
     def getLevel1(self, key):
         if key in self.keys:
@@ -81,7 +82,6 @@ class Ixml(object):
 
     def getFile_Set(self):
         return self.getLevel1("FILE_SET")
-
 
     def getLevel2(self, key):
         if key in self.keys:
@@ -162,37 +162,37 @@ class Ixml(object):
     def getDict(self):
         return self.dict_
 
+    def __str__(self):
+
+        dict_ = self.getDict()
+
+        str_ = ""
+
+        functionList = {'IXML_VERSION': self.getIxml_Version, "PROJECT": self.getProject, \
+            'SCENE': self.getScene, 'TAKE': self.getTake , 'TAPE': self.getTape, \
+            'CIRCLED': self.getCircled, 'NO_GOOD': self.getNo_Good, \
+            'FALSE_START': self.getFalse_Start, 'WILD_TRACK': self.getWild_Track, \
+            'FILE_UID': self.getFile_Uid, 'UBITS': self.getUbits, \
+            'SYNC_POINT_LIST': self.getSync_Point_List, 'NOTE': self.getNote, \
+            'HISTORY': self.getHistory, 'FILE_SET' :self.getFile_Set, \
+            'TRACK_LIST': self.getTrack_List, 'SPEED': self.getSpeed, \
+            'BEXT: ': self.getBext, 'USER': self.getUser }
+
+        str_ = ""
+
+        for k in functionList.keys():
+            str_ = str_ +  ("%s: %s \n")%(k, functionList[k]())
+
+        return  (str_)
+
+
 
 if __name__ == "__main__":
-
     fileName = 'testixml.xml'
     ixml = Ixml (fileName)
 
     dict_ = ixml.getDict()
 
-    print ("NO_GOOD: ", ixml.getNo_Good())
-    print ("IXML_VERSION: ", ixml.getIxml_Version())
-    print ("PROJECT: ", ixml.getProject())
-    print ("SCENE: ", ixml.getScene())
-    print ("TAKE: ", ixml.getTake())
-    print ("TAPE: ",  ixml.getTape())
-    print ("CIRCLED: ", ixml.getCircled())
-    print ("NO_GOOD: ", ixml.getNo_Good())
-    print ("FALSE_START: ", ixml.getFalse_Start())
-    print ("WILD_TRACK: ", ixml.getWild_Track())
-    print ("FILE_UID: ", ixml.getFile_Uid())
-    print ("NOTE: ", ixml.getNote())
-    print ("TRACK_LIST: ", ixml.getTrack_List())
-    print ("SPEED: ", ixml.getSpeed())
-    print ("BEXT: ", ixml.getBext())
-
-    key = "HISTORY"
-    print (key + ": ", ixml.getHistory())
-
-    key = "FILE_SET"
-    print (key + ": ", ixml.getFile_Set())
-
-
-    print ("SYNC_POINT_LIST: ", ixml.getSync_Point_List())
+    print(ixml)
 
 
