@@ -18,17 +18,17 @@ class Ixml(object):
     def getLevel0(self, key):
         if key in self.keys:
 
-            str_ = self.sng 
-            str_ += self.dict_["BWFXML"][key] + self.sng
+            str_ = "" 
+            str_ += self.dict_["BWFXML"][key]
         return str_
 
     def getLevel1(self, key):
         if key in self.keys:
             list_ = self.dict_["BWFXML"][key]
 
-            str_ = self.sng 
+            str_ = "" 
             for k in list_.keys():
-                str_ = str_ + ("%s: %s  %s")%(k, list_[k], self.sng)
+                str_ = str_ + ("%s: %s\n    ")%(k, list_[k])
 
         return str_
 
@@ -36,13 +36,13 @@ class Ixml(object):
         if key in self.keys:
             list_ = self.dict_["BWFXML"][key]
 
-            str_ = self.sng 
+            str_ = "" 
             for l in list_:
                 sr = ""
                 ks = l.keys()
                 for k in  ks:
-                    sr = sr + ("%s: %s ")%(k, l[k])
-                str_ = str_ +  sr + self.sng 
+                    sr = sr + ("%s: %s")%(k, l[k])
+                str_ = str_ +  sr + "\n    " 
             return str_ 
 
     def getProject(self):
@@ -166,8 +166,6 @@ class Ixml(object):
 
         dict_ = self.getDict()
 
-        str_ = ""
-
         functionList = {'IXML_VERSION': self.getIxml_Version, "PROJECT": self.getProject, \
             'SCENE': self.getScene, 'TAKE': self.getTake , 'TAPE': self.getTape, \
             'CIRCLED': self.getCircled, 'NO_GOOD': self.getNo_Good, \
@@ -176,14 +174,50 @@ class Ixml(object):
             'SYNC_POINT_LIST': self.getSync_Point_List, 'NOTE': self.getNote, \
             'HISTORY': self.getHistory, 'FILE_SET' :self.getFile_Set, \
             'TRACK_LIST': self.getTrack_List, 'SPEED': self.getSpeed, \
-            'BEXT: ': self.getBext, 'USER': self.getUser }
+            'BEXT': self.getBext, 'USER': self.getUser }
 
-        str_ = ""
+        functionListB = {'IXML_VERSION': self.getIxml_Version, "PROJECT": self.getProject, \
+                'BEXT': self.getBext, 'TRACK_LIST': self.getTrack_List,'USER': self.getUser }
 
+
+        str_ ="" 
         for k in functionList.keys():
-            str_ = str_ +  ("%s: %s \n")%(k, functionList[k]())
+            str_ = str_ +  ("%s: %s %s\n")%(k, self.sng, functionList[k]())
 
         return  (str_)
+
+    def getOrigination_Date (self):
+        return self.dict_["BWFXML"]["BEXT"]["BWF_ORIGINATION_DATE"]
+
+    def getOrigination_Time (self):
+        return self.dict_["BWFXML"]["BEXT"]["BWF_ORIGINATION_TIME"]
+
+    def getFile_Sample_Rate (self):
+        return self.dict_["BWFXML"]["SPEED"]["TIMESTAMP_SAMPLE_RATE"]
+
+    def getAudio_Bit_Depth (self):
+        return self.dict_["BWFXML"]["SPEED"]["AUDIO_BIT_DEPTH"]
+
+    def getDigitizer_Sample_Rate (self):
+        return self.dict_["BWFXML"]["SPEED"]["DIGITIZER_SAMPLE_RATE"]
+
+    def getTimecode_Rate (self):
+        return self.dict_["BWFXML"]["SPEED"]["TIMECODE_RATE"]
+
+    def getDateTime_object (self):
+        from datetime import datetime
+
+        time = ixml.getOrigination_Time()
+        date = ixml.getOrigination_Date()
+        date_time = date + " " + time
+        '''
+        2003-10-30 03:27:17
+        '''
+
+
+        datetime_object = datetime.strptime (date_time, '%Y-%m-%d %H:%M:%S')
+
+        return datetime_object
 
 
 if __name__ == "__main__":
@@ -192,6 +226,19 @@ if __name__ == "__main__":
 
     dict_ = ixml.getDict()
 
-    print(ixml)
+    print (ixml.getDateTime_object())
+
+    print(ixml.getFile_Sample_Rate())
+    print(ixml.getDigitizer_Sample_Rate())
+    print(ixml.getAudio_Bit_Depth())
+    print(ixml.getTimecode_Rate())
+    print (ixml.getProject())
+    print (ixml.getScene())
+    print (ixml.getTape())
+    print (ixml.getTake())
+
+    print (ixml)
+
+
 
 
