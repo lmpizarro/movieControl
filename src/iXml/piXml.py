@@ -17,9 +17,33 @@ class Ixml(object):
 
     def getLevel0(self, key):
         if key in self.keys:
+
             str_ = self.sng 
             str_ += self.dict_["BWFXML"][key] + self.sng
         return str_
+
+    def getLevel1(self, key):
+        if key in self.keys:
+            list_ = self.dict_["BWFXML"][key]
+
+            str_ = self.sng 
+            for k in list_.keys():
+                str_ = str_ + ("%s: %s  %s")%(k, list_[k], self.sng)
+
+        return str_
+
+    def getLevel2(self, key):
+        if key in self.keys:
+            list_ = self.dict_["BWFXML"][key]
+
+            str_ = self.sng 
+            for l in list_:
+                sr = ""
+                ks = l.keys()
+                for k in  ks:
+                    sr = sr + ("%s: %s ")%(k, l[k])
+                str_ = str_ +  sr + self.sng 
+            return str_ 
 
     def getProject(self):
         return self.getLevel0("PROJECT")
@@ -61,16 +85,6 @@ class Ixml(object):
     def getNote(self):
         return self.getLevel0("NOTE")
 
-    def getLevel1(self, key):
-        if key in self.keys:
-            list_ = self.dict_["BWFXML"][key]
-
-            str_ = self.sng 
-            for k in list_.keys():
-                str_ = str_ + ("%s: %s  %s")%(k, list_[k], self.sng)
-
-        return str_
-
     def getSpeed(self):
         return self.getLevel1("SPEED")
 
@@ -82,20 +96,6 @@ class Ixml(object):
 
     def getFile_Set(self):
         return self.getLevel1("FILE_SET")
-
-    def getLevel2(self, key):
-        if key in self.keys:
-            list_ = self.dict_["BWFXML"][key]
-
-            str_ = self.sng 
-            for l in list_:
-                sr = ""
-                ks = l.keys()
-                for k in  ks:
-                    sr = sr + ("%s: %s ")%(k, l[k])
-                str_ = str_ +  sr + self.sng 
-            return str_ 
-
 
     def getTrack_List(self):
         return self.getLevel2("TRACK_LIST")
@@ -184,7 +184,6 @@ class Ixml(object):
             str_ = str_ +  ("%s: %s \n")%(k, functionList[k]())
 
         return  (str_)
-
 
 
 if __name__ == "__main__":
