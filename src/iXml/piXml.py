@@ -14,7 +14,6 @@ class Ixml(object):
         self.keys = []
         if "BWFXML" in self.dict_.keys(): 
             self.keys = self.dict_["BWFXML"].keys()
-            
 
     def getProject(self):
         if "PROJECT" in self.keys:
@@ -60,19 +59,33 @@ class Ixml(object):
         if "NOTE" in self.keys:
             return self.dict_["BWFXML"]["NOTE"]
 
-    def getSpeed(self):
-        if "SPEED" in self.keys:
-            list_ = self.dict_["BWFXML"]["SPEED"]
+
+    def getLevel1(self, key):
+        if key in self.keys:
+            list_ = self.dict_["BWFXML"][key]
 
             str_ = self.sng 
             for k in list_.keys():
                 str_ = str_ + ("%s: %s  %s")%(k, list_[k], self.sng)
-            return str_    
+
+        return str_
+
+    def getSpeed(self):
+        return self.getLevel1("SPEED")
+
+    def getBext(self):
+        return self.getLevel1("BEXT")
+
+    def getHistory(self):
+        return self.getLevel1("HISTORY")
+
+    def getFile_Set(self):
+        return self.getLevel1("FILE_SET")
 
 
-    def getTrack_List(self):
-        if "TRACK_LIST" in self.keys:
-            list_ = self.dict_["BWFXML"]["TRACK_LIST"]
+    def getLevel2(self, key):
+        if key in self.keys:
+            list_ = self.dict_["BWFXML"][key]
 
             str_ = self.sng 
             for l in list_:
@@ -83,19 +96,12 @@ class Ixml(object):
                 str_ = str_ +  sr + self.sng 
             return str_ 
 
+
+    def getTrack_List(self):
+        return self.getLevel2("TRACK_LIST")
+
     def getSync_Point_List(self):
-        if "SYNC_POINT_LIST" in self.keys:
-            list_ = self.dict_["BWFXML"]["SYNC_POINT_LIST"]
-
-            str_ = self.sng 
-            for l in list_:
-                sr = ""
-                ks = sorted(l.keys(), reverse=True)
-                for k in  ks:
-                    sr = sr + ("%s: %s ")%(k, l[k])
-                str_ = str_ +  sr + self.sng 
-            return str_ 
-
+        return self.getLevel2("SYNC_POINT_LIST")
 
     def to_dict(self):
         from json import loads, dumps
@@ -178,6 +184,15 @@ if __name__ == "__main__":
     print ("NOTE: ", ixml.getNote())
     print ("TRACK_LIST: ", ixml.getTrack_List())
     print ("SPEED: ", ixml.getSpeed())
+    print ("BEXT: ", ixml.getBext())
+
+    key = "HISTORY"
+    print (key + ": ", ixml.getHistory())
+
+    key = "FILE_SET"
+    print (key + ": ", ixml.getFile_Set())
+
+
     print ("SYNC_POINT_LIST: ", ixml.getSync_Point_List())
 
 
