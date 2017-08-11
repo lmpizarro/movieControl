@@ -2,10 +2,12 @@ import xml.etree.ElementTree as etree
 import xmltodict
 
 class Ixml(object):
+
     def __init__(self, xmlFile):
         self.xmlFile = xmlFile
         self.tree = etree.parse(self.xmlFile)
         self.root = self.tree.getroot()
+        self.sng = "\n   "
 
         self.toDict()
 
@@ -58,20 +60,41 @@ class Ixml(object):
         if "NOTE" in self.keys:
             return self.dict_["BWFXML"]["NOTE"]
 
+    def getSpeed(self):
+        if "SPEED" in self.keys:
+            list_ = self.dict_["BWFXML"]["SPEED"]
+
+            str_ = self.sng 
+            for k in list_.keys():
+                str_ = str_ + ("%s: %s  %s")%(k, list_[k], self.sng)
+            return str_    
+
+
     def getTrack_List(self):
-        sng = "\n   "
         if "TRACK_LIST" in self.keys:
             list_ = self.dict_["BWFXML"]["TRACK_LIST"]
 
-            str_ = sng 
+            str_ = self.sng 
             for l in list_:
                 sr = ""
                 ks = l.keys()
                 for k in  ks:
                     sr = sr + ("%s: %s ")%(k, l[k])
-                str_ = str_ +  sr + sng 
+                str_ = str_ +  sr + self.sng 
             return str_ 
 
+    def getSync_Point_List(self):
+        if "SYNC_POINT_LIST" in self.keys:
+            list_ = self.dict_["BWFXML"]["SYNC_POINT_LIST"]
+
+            str_ = self.sng 
+            for l in list_:
+                sr = ""
+                ks = sorted(l.keys(), reverse=True)
+                for k in  ks:
+                    sr = sr + ("%s: %s ")%(k, l[k])
+                str_ = str_ +  sr + self.sng 
+            return str_ 
 
 
     def to_dict(self):
@@ -136,7 +159,7 @@ class Ixml(object):
 
 if __name__ == "__main__":
 
-    fileName = 'testixmlC.xml'
+    fileName = 'testixml.xml'
     ixml = Ixml (fileName)
 
     dict_ = ixml.getDict()
@@ -154,8 +177,7 @@ if __name__ == "__main__":
     print ("FILE_UID: ", ixml.getFile_Uid())
     print ("NOTE: ", ixml.getNote())
     print ("TRACK_LIST: ", ixml.getTrack_List())
+    print ("SPEED: ", ixml.getSpeed())
+    print ("SYNC_POINT_LIST: ", ixml.getSync_Point_List())
 
-    if "SPEED" in ixml.keys:
-        for k in dict_["BWFXML"]["SPEED"]:
-            print ("SPEED ", k, " " , dict_["BWFXML"]["SPEED"][k])
 
